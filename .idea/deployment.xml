@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="http://112.137.129.95">
+    <serverData>
+      <paths name="http://112.137.129.95">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/apache-tomcat-9.0.0.M19/webapps/api" local="$PROJECT_DIR$" web="/api" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>
