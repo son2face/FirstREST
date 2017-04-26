@@ -7,7 +7,7 @@ import legal.Entity.LegalInfo.LegalInfoEntity;
 import legal.Interface.DatabaseConnection.IDatabaseConnection;
 import legal.Model.LegalInfo.LegalInfoModel;
 import legal.Service.DatabaseConnection.DatabaseConnectionFactory;
-import legal.Service.DatabaseConnection.SQLSeverConnection;
+import legal.Service.DatabaseConnection.MySQLConnection;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -24,7 +24,7 @@ import java.util.List;
 public class InfoController {
 
     static {
-        int idConnection = DatabaseConnectionFactory.addDatabaseConnection(new SQLSeverConnection("42.112.212.163:1433", "Test", "test", "123456a@"));
+        int idConnection = DatabaseConnectionFactory.addDatabaseConnection(new MySQLConnection("localhost", "Test", "root", "root"));
         IDatabaseConnection connection = DatabaseConnectionFactory.getDatabaseConnection(idConnection);
         LegalInfoEntity.setDatabaseConnection(connection);
         DataLinkEntity.setDatabaseConnection(connection);

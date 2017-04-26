@@ -16,9 +16,9 @@ import java.util.List;
  * Created by Son on 4/11/2017.
  */
 public class LegalInfoEntity implements IDatabaseEntity {
-    LegalInfoModel legalInfo;
     private static final String tableName = "LegalInfo";
     private static IDatabaseConnection databaseConnection;
+    LegalInfoModel legalInfo;
 
     public LegalInfoEntity(LegalInfoModel legalInfo) {
         this.legalInfo = legalInfo;
@@ -53,7 +53,9 @@ public class LegalInfoEntity implements IDatabaseEntity {
 
     public List<Object> selectLimit(String number, int limit, Date date) throws SQLException {
         Statement statement = databaseConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT TOP(" + limit + ") * FROM " + tableName + " WHERE TYPE LIKE N'%" + number + "%' AND dateExecute < '" + date + "';");
+//        ResultSet resultSet = statement.executeQuery("SELECT TOP(" + limit + ") * FROM " + tableName + " WHERE TYPE LIKE N'%" + number + "%' AND dateExecute < '" + date + "';");
+        System.out.println("SELECT * FROM " + tableName + " WHERE TYPE LIKE '%" + number + "%' AND dateCreated < '" + date + "' LIMIT " + limit + ";");
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE TYPE LIKE '%" + number + "%' AND dateCreated < '" + date + "' LIMIT " + limit + ";");
         List<Object> result = new ArrayList<>();
         while (resultSet.next()) {
             result.add(new LegalInfoModel(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9), resultSet.getString(10), resultSet.getString(11)));

@@ -54,6 +54,10 @@
           <element id="library" level="project" name="Maven: org.apache.pdfbox:preflight:2.0.0" />
           <element id="library" level="project" name="Maven: org.apache.pdfbox:xmpbox:2.0.0" />
           <element id="library" level="project" name="Maven: commons-lang:commons-lang:2.6" />
+          <element id="library" level="project" name="Maven: commons-io:commons-io:2.5" />
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:6.0.6" />
+          <element id="library" level="project" name="Maven: com.jcraft:jsch:0.1.54" />
+          <element id="library" level="project" name="Arquillian JUnit:Latest" />
         </element>
       </element>
     </root>
