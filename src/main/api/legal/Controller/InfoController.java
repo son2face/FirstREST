@@ -1,13 +1,7 @@
 package legal.Controller;
 
-import legal.Entity.DataLink.DataLinkEntity;
-import legal.Entity.DataLink.DocumentLinkEntity;
-import legal.Entity.DataLink.LegalLinkEntity;
 import legal.Entity.LegalInfo.LegalInfoEntity;
-import legal.Interface.DatabaseConnection.IDatabaseConnection;
 import legal.Model.LegalInfo.LegalInfoModel;
-import legal.Service.DatabaseConnection.DatabaseConnectionFactory;
-import legal.Service.DatabaseConnection.MySQLConnection;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -23,15 +17,6 @@ import java.util.List;
 @Path("/legal/info")
 public class InfoController {
 
-    static {
-        int idConnection = DatabaseConnectionFactory.addDatabaseConnection(new MySQLConnection("localhost", "Test", "root", "root"));
-        IDatabaseConnection connection = DatabaseConnectionFactory.getDatabaseConnection(idConnection);
-        LegalInfoEntity.setDatabaseConnection(connection);
-        DataLinkEntity.setDatabaseConnection(connection);
-        LegalLinkEntity.setDatabaseConnection(connection);
-        DocumentLinkEntity.setDatabaseConnection(connection);
-    }
-
     @GET
     @Produces(MediaType.TEXT_HTML)
     public String getMessage() {
@@ -45,18 +30,16 @@ public class InfoController {
         JSONObject obj = new JSONObject();
         LegalInfoEntity legalInfoEntity = new LegalInfoEntity();
         int statusCode = 200;
-        Date date = null;
+        Date date;
         JSONArray data = new JSONArray();
         if ("".equals(query)) statusCode = 400;
         else {
             try {
                 date = Date.valueOf(dateS);
             } catch (Exception e) {
-                System.out.println("loi dinh dang");
                 date = Date.valueOf(LocalDate.now());
             }
             List<LegalInfoModel> t = (List<LegalInfoModel>) (List<?>) legalInfoEntity.selectLimit(query, limit, date);
-
             for (LegalInfoModel x : t) {
                 data.add(x.toJsonObject());
             }

@@ -2,6 +2,7 @@ package legal.Service.DatabaseConnection;
 
 import legal.Interface.DatabaseConnection.IDatabaseConnection;
 import legal.Interface.DatabaseConnection.IDatabaseDictionary;
+import manager.Model.DatabaseModel;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,24 +14,18 @@ import java.util.logging.Logger;
 /**
  * Created by Son on 4/10/2017.
  */
-public class SQLSeverConnection implements IDatabaseConnection{
+public class SQLSeverConnection implements IDatabaseConnection {
     public IDatabaseDictionary databaseDictionary = new SQLSeverDictionary();
     private Connection connection;
     private Statement statement;
-    private String url;
-    private String databaseName;
-    private String userName;
-    private String passWord;
+    private DatabaseModel databaseModel;
 
-    public SQLSeverConnection(String url, String databaseName, String userName, String passWord) {
-        this.url = url;
-        this.databaseName = databaseName;
-        this.userName = userName;
-        this.passWord = passWord;
+    public SQLSeverConnection(DatabaseModel databaseModel) {
+        this.databaseModel = new DatabaseModel(databaseModel.id, databaseModel.typeDB, databaseModel.url, databaseModel.databaseName, databaseModel.userName, databaseModel.passWord);
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            this.connection = DriverManager.getConnection("jdbc:sqlserver://" + url + ";" +
-                    "databaseName=" + databaseName + ";user=" + userName + ";password=" + passWord);
+            this.connection = DriverManager.getConnection("jdbc:sqlserver://" + this.databaseModel.url + ";" +
+                    "databaseName=" + this.databaseModel.databaseName + ";user=" + this.databaseModel.userName + ";password=" + this.databaseModel.passWord);
             this.statement = connection.createStatement();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SQLSeverConnection.class.getName()).log(Level.SEVERE, null, ex);
@@ -46,7 +41,7 @@ public class SQLSeverConnection implements IDatabaseConnection{
 
     @Override
     public IDatabaseConnection clone() {
-        return new SQLSeverConnection(this.url, this.databaseName, this.userName, this.passWord);
+        return new SQLSeverConnection(this.databaseModel);
     }
 
     @Override

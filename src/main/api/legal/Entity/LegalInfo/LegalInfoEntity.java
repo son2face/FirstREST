@@ -17,24 +17,25 @@ import java.util.List;
  */
 public class LegalInfoEntity implements IDatabaseEntity {
     private static final String tableName = "LegalInfo";
-    private static IDatabaseConnection databaseConnection;
+    private static IDatabaseConnection DATABASECONNECTION;
     LegalInfoModel legalInfo;
+    private IDatabaseConnection databaseConnection;
 
     public LegalInfoEntity(LegalInfoModel legalInfo) {
         this.legalInfo = legalInfo;
+        databaseConnection = DATABASECONNECTION.clone();
     }
 
     public LegalInfoEntity() {
-
+        databaseConnection = DATABASECONNECTION.clone();
     }
 
     public static void setDatabaseConnection(IDatabaseConnection databaseConnection) {
-        LegalInfoEntity.databaseConnection = databaseConnection;
+        LegalInfoEntity.DATABASECONNECTION = databaseConnection;
     }
 
     @Override
     public void insert() throws SQLException {
-
         Statement statement = databaseConnection.createStatement();
         statement.executeUpdate("INSERT INTO " + tableName + "(" +
                 "number ,dateCreated  ,title , dateExecute , standing, confirmation , institution, type, status, position" +
@@ -51,11 +52,11 @@ public class LegalInfoEntity implements IDatabaseEntity {
         return result;
     }
 
-    public List<Object> selectLimit(String number, int limit, Date date) throws SQLException {
+    public List<Object> selectLimit(String title, int limit, Date date) throws SQLException {
         Statement statement = databaseConnection.createStatement();
 //        ResultSet resultSet = statement.executeQuery("SELECT TOP(" + limit + ") * FROM " + tableName + " WHERE TYPE LIKE N'%" + number + "%' AND dateExecute < '" + date + "';");
-        System.out.println("SELECT * FROM " + tableName + " WHERE TYPE LIKE '%" + number + "%' AND dateCreated < '" + date + "' LIMIT " + limit + ";");
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE TYPE LIKE '%" + number + "%' AND dateCreated < '" + date + "' LIMIT " + limit + ";");
+//        System.out.println("SELECT * FROM " + tableName + " WHERE TITLE LIKE '%" + number + "%' AND dateCreated < '" + date + "' LIMIT " + limit + ";");
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE title LIKE '%" + title + "%' AND dateCreated < '" + date + "' LIMIT " + limit + ";");
         List<Object> result = new ArrayList<>();
         while (resultSet.next()) {
             result.add(new LegalInfoModel(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9), resultSet.getString(10), resultSet.getString(11)));
@@ -110,21 +111,21 @@ public class LegalInfoEntity implements IDatabaseEntity {
     }
 
     @Override
-    public void createTable() throws SQLException {
+    public void create() throws SQLException {
         Statement statement = databaseConnection.createStatement();
         statement.execute("CREATE TABLE " + tableName + "(id INT " + databaseConnection.getDatabaseDictionary().autoIncrement() + " PRIMARY KEY," +
                 "number NVARCHAR(100),dateCreated DATE ,title NVARCHAR(1000), dateExecute DATE , standing NVARCHAR(1000), confirmation NVARCHAR(1000), institution NVARCHAR(1000), type NVARCHAR(1000), status NVARCHAR(1000), position NVARCHAR(1000));");
     }
 
     @Override
-    public void truncateTable() throws SQLException {
+    public void truncate() throws SQLException {
         Statement statement = databaseConnection.createStatement();
         statement.execute("TRUNCATE TABLE " + tableName + ";");
     }
 
 
     @Override
-    public void dropTable() throws SQLException {
+    public void drop() throws SQLException {
         Statement statement = databaseConnection.createStatement();
         statement.execute("DROP TABLE " + tableName + ";");
     }

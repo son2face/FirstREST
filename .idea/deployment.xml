@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="http://112.137.129.95">
+  <component name="PublishConfigData" autoUpload="Always" serverName="http://112.137.129.95" promptOnLocalOverwrite="false" filePermissions="511" folderPermissions="511">
     <serverData>
+      <paths name="120">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/apache-tomcat-9.0.0.M19/webapps/api" local="$PROJECT_DIR$/out/artifacts/unnamed" web="/api" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="http://112.137.129.95">
         <serverdata>
           <mappings>
-            <mapping deploy="/apache-tomcat-9.0.0.M19/webapps/api" local="$PROJECT_DIR$" web="/api" />
+            <mapping deploy="/apache-tomcat-9.0.0.M19/webapps/api" local="$PROJECT_DIR$/out/artifacts/unnamed" web="/api" />
           </mappings>
         </serverdata>
       </paths>

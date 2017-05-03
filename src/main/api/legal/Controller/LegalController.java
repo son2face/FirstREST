@@ -1,11 +1,8 @@
 package legal.Controller;
 
 import legal.Entity.LegalInfo.LegalInfoEntity;
-import legal.Interface.DatabaseConnection.IDatabaseConnection;
 import legal.Interface.LegalProcess.ILegalProcess;
 import legal.Model.LegalInfo.LegalInfoModel;
-import legal.Service.DatabaseConnection.DatabaseConnectionFactory;
-import legal.Service.DatabaseConnection.SQLSeverConnection;
 import legal.Service.LegalProcess.FileTextProcessService;
 import legal.Service.LegalProcess.LinkProcess;
 import legal.Service.LegalProcess.NativeTextProcess;
@@ -17,17 +14,13 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import java.io.*;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
 
 @Path("/legal/detect")
 public class LegalController {
-    static {
-        int idConnection = DatabaseConnectionFactory.addDatabaseConnection(new SQLSeverConnection("42.112.212.163:1433","Test", "test","123456a@"));
-        IDatabaseConnection connection = DatabaseConnectionFactory.getDatabaseConnection(idConnection);
-        LegalInfoEntity.setDatabaseConnection(connection);
-    }
+
     @GET
     @Produces(MediaType.TEXT_HTML)
     public String getMessage() {

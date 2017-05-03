@@ -14,22 +14,25 @@ import java.util.List;
  * Created by Son on 4/10/2017.
  */
 public class DataLinkEntity implements IDatabaseEntity {
-    DataLinkModel dataLink;
     private static final String tableName = "datalink";
-    private static IDatabaseConnection databaseConnection;
-
-    public static void setDatabaseConnection(IDatabaseConnection databaseConnection) {
-        DataLinkEntity.databaseConnection = databaseConnection;
-    }
+    private static IDatabaseConnection DATABASECONNECTION;
+    DataLinkModel dataLink;
+    private IDatabaseConnection databaseConnection;
 
     public DataLinkEntity(int id, String link, String data) {
         this.dataLink = new DataLinkModel(id, link, data);
+        databaseConnection = DATABASECONNECTION.clone();
     }
 
     public DataLinkEntity(DataLinkEntity dataLinkEntity) {
         this.dataLink.id = dataLinkEntity.dataLink.id;
         this.dataLink.link = dataLinkEntity.dataLink.link;
         this.dataLink.data = dataLinkEntity.dataLink.data;
+        databaseConnection = DATABASECONNECTION.clone();
+    }
+
+    public static void setDatabaseConnection(IDatabaseConnection databaseConnection) {
+        DataLinkEntity.DATABASECONNECTION = databaseConnection;
     }
 
     public static String getTableName() {
@@ -97,20 +100,20 @@ public class DataLinkEntity implements IDatabaseEntity {
     }
 
     @Override
-    public void createTable() throws SQLException {
+    public void create() throws SQLException {
         Statement statement = databaseConnection.createStatement();
         statement.execute("CREATE TABLE " + tableName + "(id INT " + databaseConnection.getDatabaseDictionary().autoIncrement() + " PRIMARY KEY," +
                 "link NVARCHAR(1000),data TEXT);");
     }
 
     @Override
-    public void truncateTable() throws SQLException {
+    public void truncate() throws SQLException {
         Statement statement = databaseConnection.createStatement();
         statement.execute("TRUNCATE TABLE " + tableName + ";");
     }
 
     @Override
-    public void dropTable() throws SQLException {
+    public void drop() throws SQLException {
         Statement statement = databaseConnection.createStatement();
         statement.execute("DROP TABLE " + tableName + ";");
     }

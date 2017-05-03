@@ -4,7 +4,6 @@ import legal.Interface.DatabaseCommunication.IDatabaseEntity;
 import legal.Interface.DatabaseConnection.IDatabaseConnection;
 import legal.Model.DataLink.DocumentLinkModel;
 
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,16 +14,14 @@ import java.util.List;
  * Created by Son on 4/10/2017.
  */
 public class DocumentLinkEntity implements IDatabaseEntity {
-    public DocumentLinkModel documentLink;
     private static final String tableName = "documentlink";
-    private static IDatabaseConnection databaseConnection;
-
-    public static void setDatabaseConnection(IDatabaseConnection databaseConnection) {
-        DocumentLinkEntity.databaseConnection = databaseConnection;
-    }
+    private static IDatabaseConnection DATABASECONNECTION;
+    public DocumentLinkModel documentLink;
+    private IDatabaseConnection databaseConnection;
 
     public DocumentLinkEntity(int id, int linkId, String name, String documentLink) {
         this.documentLink = new DocumentLinkModel(id, linkId, name, documentLink);
+        databaseConnection = DATABASECONNECTION.clone();
     }
 
     public DocumentLinkEntity(DocumentLinkEntity documentLinkEntity) {
@@ -32,6 +29,11 @@ public class DocumentLinkEntity implements IDatabaseEntity {
         this.documentLink.linkId = documentLinkEntity.documentLink.linkId;
         this.documentLink.name = documentLinkEntity.documentLink.name;
         this.documentLink.documentLink = documentLinkEntity.documentLink.documentLink;
+        databaseConnection = DATABASECONNECTION.clone();
+    }
+
+    public static void setDatabaseConnection(IDatabaseConnection databaseConnection) {
+        DocumentLinkEntity.DATABASECONNECTION = databaseConnection;
     }
 
     public static String getTableName() {
@@ -99,20 +101,20 @@ public class DocumentLinkEntity implements IDatabaseEntity {
     }
 
     @Override
-    public void createTable() throws SQLException {
+    public void create() throws SQLException {
         Statement statement = databaseConnection.createStatement();
         statement.execute("CREATE TABLE " + tableName + "(id INT " + databaseConnection.getDatabaseDictionary().autoIncrement() + " PRIMARY KEY," +
                 "link VARCHAR(1000),name VARCHAR (1000), documentLink VARCHAR (1000));");
     }
 
     @Override
-    public void truncateTable() throws SQLException {
+    public void truncate() throws SQLException {
         Statement statement = databaseConnection.createStatement();
         statement.execute("TRUNCATE TABLE " + tableName + ";");
     }
 
     @Override
-    public void dropTable() throws SQLException {
+    public void drop() throws SQLException {
         Statement statement = databaseConnection.createStatement();
         statement.execute("DROP TABLE " + tableName + ";");
     }

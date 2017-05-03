@@ -14,22 +14,25 @@ import java.util.List;
  * Created by Son on 4/10/2017.
  */
 public class LegalLinkEntity implements IDatabaseEntity {
-    LegalLinkModel legalLink;
     private static final String tableName = "LegalLink";
-    private static IDatabaseConnection databaseConnection;
-
-    public static void setDatabaseConnection(IDatabaseConnection databaseConnection) {
-        LegalLinkEntity.databaseConnection = databaseConnection;
-    }
+    private static IDatabaseConnection DATABASECONNECTION;
+    LegalLinkModel legalLink;
+    private IDatabaseConnection databaseConnection;
 
     public LegalLinkEntity(int id, int idLegal, int idLink) {
         this.legalLink = new LegalLinkModel(id, idLegal, idLink);
+        databaseConnection = DATABASECONNECTION.clone();
     }
 
     public LegalLinkEntity(LegalLinkEntity legalLinkEntity) {
         this.legalLink.id = legalLinkEntity.legalLink.id;
         this.legalLink.idLegal = legalLinkEntity.legalLink.idLegal;
         this.legalLink.idLink = legalLinkEntity.legalLink.idLink;
+        databaseConnection = DATABASECONNECTION.clone();
+    }
+
+    public static void setDatabaseConnection(IDatabaseConnection databaseConnection) {
+        LegalLinkEntity.DATABASECONNECTION = databaseConnection;
     }
 
     public static String getTableName() {
@@ -97,20 +100,20 @@ public class LegalLinkEntity implements IDatabaseEntity {
     }
 
     @Override
-    public void createTable() throws SQLException {
+    public void create() throws SQLException {
         Statement statement = databaseConnection.createStatement();
         statement.execute("CREATE TABLE " + tableName + "(id INT " + databaseConnection.getDatabaseDictionary().autoIncrement() + " PRIMARY KEY," +
                 "idLegal INT,idLink INT);");
     }
 
     @Override
-    public void truncateTable() throws SQLException {
+    public void truncate() throws SQLException {
         Statement statement = databaseConnection.createStatement();
         statement.execute("TRUNCATE TABLE " + tableName + ";");
     }
 
     @Override
-    public void dropTable() throws SQLException {
+    public void drop() throws SQLException {
         Statement statement = databaseConnection.createStatement();
         statement.execute("DROP TABLE " + tableName + ";");
     }

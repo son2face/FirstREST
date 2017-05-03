@@ -17,12 +17,12 @@ public class UniversityConnection extends MySQLConnection {
         String host="112.137.129.120";
         int rport=3306;
         String user="sonnv_60";
-        this.userName = user;
+        this.databaseModel.userName = user;
         String password="abcd1234";
-        this.passWord = password;
+        this.databaseModel.passWord = password;
         String dbuserName = "root";
-        this.url = "localhost:" + lport;
-        this.databaseName = "test";
+        this.databaseModel.url = "localhost:" + lport;
+        this.databaseModel.databaseName = "test";
         String dbpassword = "root";
         String urll = "jdbc:mysql://127.0.0.1:"+lport+ "/test";
         String driverName="com.mysql.cj.jdbc.Driver";

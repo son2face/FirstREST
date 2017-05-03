@@ -2,6 +2,7 @@ package legal.Service.DatabaseConnection;
 
 import legal.Interface.DatabaseConnection.IDatabaseConnection;
 import legal.Interface.DatabaseConnection.IDatabaseDictionary;
+import manager.Model.DatabaseModel;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,19 +18,18 @@ public class MySQLConnection implements IDatabaseConnection {
     public IDatabaseDictionary databaseDictionary = new MySQLDictionary();
     protected Connection connection;
     protected Statement statement;
-    protected String url;
-    protected String databaseName;
-    protected String userName;
-    protected String passWord;
+    protected DatabaseModel databaseModel;
 
-    public MySQLConnection(String url, String databaseName, String userName, String passWord) {
-        this.url = url;
-        this.databaseName = databaseName;
-        this.userName = userName;
-        this.passWord = passWord;
+    public MySQLConnection(DatabaseModel databaseModel) {
+        this.databaseModel = new DatabaseModel(databaseModel.id, databaseModel.typeDB, databaseModel.url, databaseModel.databaseName, databaseModel.userName, databaseModel.passWord);
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            this.connection = DriverManager.getConnection("jdbc:mysql://" + url + "/" + databaseName + "?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false", userName, passWord);
+            System.out.println(this.databaseModel.url);
+            System.out.println(this.databaseModel.databaseName);
+            System.out.println(this.databaseModel.userName);
+            System.out.println(this.databaseModel.passWord);
+
+            this.connection = DriverManager.getConnection("jdbc:mysql://" + this.databaseModel.url + "/" + this.databaseModel.databaseName + "?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false&autoReconnect=true", this.databaseModel.userName, this.databaseModel.passWord);
             this.statement = connection.createStatement();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SQLSeverConnection.class.getName()).log(Level.SEVERE, null, ex);
@@ -43,7 +43,7 @@ public class MySQLConnection implements IDatabaseConnection {
 
     @Override
     public IDatabaseConnection clone() {
-        return new MySQLConnection(this.url, this.databaseName, this.userName, this.passWord);
+        return new MySQLConnection(this.databaseModel);
     }
 
     @Override

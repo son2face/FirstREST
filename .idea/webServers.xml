@@ -10,6 +10,14 @@
           <option name="port" value="22" />
         </fileTransfer>
       </webServer>
+      <webServer id="a47bbe14-ba6a-4618-8d41-738b9b1c770a" name="120" url="http://112.137.129.120:8080">
+        <fileTransfer host="112.137.129.120" port="22" rootFolder="/home/sonnv_60" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>

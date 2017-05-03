@@ -1,26 +1,25 @@
 package legal.Interface.DatabaseCommunication;
-
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 /**
  * Created by Son on 4/10/2017.
  */
 public interface IDatabaseEntity {
-    void insert() throws SQLException;
-    void update() throws SQLException;
-    void delete() throws SQLException;
-    List<Object> select() throws SQLException;
-    void insert(List<Object> data) throws SQLException;
-    void createTable() throws SQLException;
-    void truncateTable() throws SQLException;
-    void dropTable() throws SQLException;
+    void insert() throws Exception;
 
-    /**
-     *
-     * @param id
-     * @return
-     */
-    List<Object> select(int id) throws SQLException;
+    void update() throws Exception;
+
+    void delete() throws Exception;
+
+    List<Object> select() throws Exception;
+
+    void insert(List<Object> data) throws Exception;
+
+    void create() throws Exception;
+
+    void truncate() throws Exception;
+
+    void drop() throws Exception;
+
+    List<Object> select(int id) throws Exception;
 }
