@@ -18,9 +18,25 @@ import java.util.List;
 public class InfoController {
 
     @GET
-    @Produces(MediaType.TEXT_HTML)
-    public String getMessage() {
-        return "Tổ chức kiểm tra";
+    @Produces(MediaType.APPLICATION_JSON)
+    public String get(@Context HttpHeaders headers, @DefaultValue("") @QueryParam("q") String query, @DefaultValue("20") @QueryParam("limit") int limit, @QueryParam("date") String dateS) throws SQLException {
+        JSONObject obj = new JSONObject();
+        LegalInfoEntity legalInfoEntity = new LegalInfoEntity();
+        int statusCode = 200;
+        Date date;
+        JSONArray data = new JSONArray();
+        try {
+            date = Date.valueOf(dateS);
+        } catch (Exception e) {
+            date = Date.valueOf(LocalDate.now());
+        }
+        List<LegalInfoModel> t = (List<LegalInfoModel>) (List<?>) legalInfoEntity.selectLimit(query, limit, date);
+        for (LegalInfoModel x : t) {
+            data.add(x.toJsonObject());
+        }
+        obj.put("status", statusCode);
+        obj.put("data", data);
+        return obj.toString();
     }
 
     @GET

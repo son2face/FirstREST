@@ -2,7 +2,7 @@
     <div class="portlet box  my-bg-green">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa fa-cogs"></i>Quản lí cơ sở dữ liệu
+                <i class="fa fa-cogs"></i>Thông tin văn bản pháp luật
             </div>
             <!--<div class="actions">-->
             <!--<a href="javascript:;" class="btn btn-default btn-sm">-->
@@ -38,16 +38,26 @@
             <div class="table-responsive">
                 <table ng-table="xxx" class="table table-condensed table-bordered table-striped" show-filter="true">
                     <tr ng-repeat="x in $data">
-                        <td title="'Type Database'" filter="{ typeDB: 'number'}" sortable="'typeDB'"
-                            data-ng-bind="x.typeDB"></td>
-                        <td title="'URL'" filter="{ url: 'text'}" sortable="'url'"
-                            data-ng-bind="x.url"></td>
-                        <td title="'Database/Schema'" filter="{ databaseName: 'text'}" sortable="'databaseName'"
-                            data-ng-bind="x.databaseName"></td>
-                        <td title="'Username'" filter="{ userName: 'text'}" sortable="'userName'"
-                            data-ng-bind="x.userName"></td>
-                        <td title="'Password'" filter="{ passWord: 'text'}" sortable="'passWord'"
-                            data-ng-bind="x.passWord"></td>
+                        <td title="'ID'" filter="{ id: 'number'}" sortable="'id'"
+                            data-ng-bind="x.id"></td>
+                        <td title="'Loại văn bản'" filter="{ type: 'text'}" sortable="'type'"
+                            data-ng-bind="x.type"></td>
+                        <td title="'Tên văn bản'" filter="{ title: 'text'}" sortable="'title'"
+                            data-ng-bind="x.title"></td>
+                        <td title="'Ngày ban hành'" filter="{ dateCreated: 'date'}" sortable="'dateCreated'"
+                            data-ng-bind="x.dateCreated"></td>
+                        <td title="'Ngày có hiệu lực'" filter="{ dateExecute: 'date'}" sortable="'dateExecute'"
+                            data-ng-bind="x.dateExecute"></td>
+                        <td title="'Nơi ban hành'" filter="{ standing: 'text'}" sortable="'standing'"
+                            data-ng-bind="x.standing"></td>
+                        <td title="'Trạng thái'" filter="{ status: 'text'}" sortable="'status'"
+                            data-ng-bind="x.status"></td>
+                        <td title="'Người kí'" filter="{ confirmation: 'text'}" sortable="'confirmation'"
+                            data-ng-bind="x.confirmation"></td>
+                        <td title="'Chức vụ'" filter="{ position: 'text'}" sortable="'position'"
+                            data-ng-bind="x.position"></td>
+                        <td title="'Cơ quan ban hành'" filter="{ institution: 'text'}" sortable="'institution'"
+                            data-ng-bind="x.institution"></td>
                         <td title="''" style="white-space: nowrap">
                             <div class="buttons">
                                 <button class="btn btn-sm btn-success" ng-click="setDB(x)" title="Sử dụng database">

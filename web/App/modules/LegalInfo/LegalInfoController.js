@@ -1,16 +1,12 @@
 /**
  * Created by Son on 4/28/2017.
  */
-angular.module('managerApp').controller('ManagerController', function ($scope, $http, NgTableParams) {
+angular.module('managerApp').controller('LegalInfoController', function ($scope, $http, NgTableParams) {
     $scope.database = [];
     // $scope.baseUrl = "http://skylab.uet.vnu.edu.vn:8080/api/";
     $scope.baseUrl = "";
-    $http.get($scope.baseUrl + "v1/unity/myip")
-        .then(function (response) {
-            $scope.$state.current.data.pageSubTitle = "IP ADDRESS : " + response.data.ip;
-        });
     $scope.getData = function () {
-        $http.get($scope.baseUrl + "v1/managers/database")
+        $http.get("v1/legal/info/")
             .then(function (response) {
                 $scope.database = response.data.data;
                 $scope.xxx = new NgTableParams({}, {dataset: $scope.database});

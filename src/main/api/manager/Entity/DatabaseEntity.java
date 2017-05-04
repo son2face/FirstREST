@@ -62,9 +62,9 @@ public class DatabaseEntity implements IDatabaseEntity {
         for (DatabaseModel x : databaseModels) {
             w.write(x.typeDB + "\n");
             w.write(x.url + "\n");
+            w.write(x.databaseName + "\n");
             w.write(x.userName + "\n");
             w.write(x.passWord + "\n");
-            w.write(x.databaseName + "\n");
         }
         w.close();
     }
