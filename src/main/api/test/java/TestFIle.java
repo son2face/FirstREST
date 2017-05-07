@@ -12,10 +12,10 @@ import java.util.List;
 public class TestFIle {
     public static void main(String[] args) {
         List<String> t = FileService.read("zipdata");
-        for (String x : t){
+        for (String x : t) {
 //            System.out.println(x);
             List<DataZipEntity> dataZipEntities = ZipReaderService.read(x);
-            for (DataZipEntity g : dataZipEntities){
+            for (DataZipEntity g : dataZipEntities) {
                 System.out.println(g.name);
             }
         }

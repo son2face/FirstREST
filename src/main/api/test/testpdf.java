@@ -17,8 +17,8 @@ public class testpdf {
         File initialFile = new File("C:\\Users\\Son\\Desktop\\test.pdf");
         try {
             InputStream targetStream = Files.asByteSource(initialFile).openStream();
-            ILegalProcess processLegal = new FileTextProcessService(targetStream,"pdf");
-            for(String x:((TextProcess)processLegal).lines){
+            ILegalProcess processLegal = new FileTextProcessService(targetStream, "pdf");
+            for (String x : ((TextProcess) processLegal).lines) {
                 System.out.println(x);
             }
             System.out.println(processLegal.getInfo().toString());

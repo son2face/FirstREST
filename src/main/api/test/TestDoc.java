@@ -1,14 +1,14 @@
 package test;
 
-import com.google.common.io.Files;
 import legal.Interface.LegalProcess.ILegalProcess;
 import legal.Model.LegalInfo.LegalInfoModel;
 import legal.Service.LegalProcess.DocFileProcessService;
-import legal.Service.LegalProcess.FileTextProcessService;
-import legal.Service.LegalProcess.TextProcess;
 import org.apache.poi.xwpf.usermodel.*;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -18,7 +18,7 @@ public class TestDoc {
     public static void main(String[] args) {
         ILegalProcess processLegal = new DocFileProcessService("data\\76799\\14161981691230.doc");
         List<String> lines = processLegal.getLines();
-        for(String line : lines){
+        for (String line : lines) {
             System.out.println(line);
         }
         LegalInfoModel l = processLegal.getInfo();

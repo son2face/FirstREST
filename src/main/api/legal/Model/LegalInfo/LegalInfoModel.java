@@ -16,6 +16,7 @@ public class LegalInfoModel {
     public String type = "";
     public String status = "";
     public String position = "";
+
     public LegalInfoModel(int id, String number, Date dateCreated, String title, Date dateExecute, String standing, String confirmation, String institution, String type, String status, String position) {
         this.id = id;
         this.number = number;
@@ -53,7 +54,7 @@ public class LegalInfoModel {
 
     public JSONObject toJsonObject() {
         JSONObject obj = new JSONObject();
-        obj.put("id",id);
+        obj.put("id", id);
         obj.put("number", number);
         obj.put("dateCreated", dateCreated.getTime());
         obj.put("title", title);
@@ -67,7 +68,7 @@ public class LegalInfoModel {
         return obj;
     }
 
-    public String toString(){
+    public String toString() {
         return "id: " + id + "\n" +
                 "number: " + number + "\n" +
                 "dateCreated: " + dateCreated.toString() + "\n" +

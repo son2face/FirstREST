@@ -11,23 +11,24 @@ import java.util.List;
  * Created by Son on 4/9/2017.
  */
 public class testDocx {
-        public static void readDocxFile(String fileName) {
+    public static void readDocxFile(String fileName) {
 
-            try {
-                File file = new File(fileName);
-                FileInputStream fis = new FileInputStream(file.getAbsolutePath());
-                XWPFDocument document = new XWPFDocument(fis);
-                List<XWPFParagraph> paragraphs = document.getParagraphs();
-                for (XWPFParagraph para : paragraphs) {
-                    System.out.println(para.getText());
-                    System.out.println();
-                }
-                fis.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+        try {
+            File file = new File(fileName);
+            FileInputStream fis = new FileInputStream(file.getAbsolutePath());
+            XWPFDocument document = new XWPFDocument(fis);
+            List<XWPFParagraph> paragraphs = document.getParagraphs();
+            for (XWPFParagraph para : paragraphs) {
+                System.out.println(para.getText());
+                System.out.println();
             }
+            fis.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        public static void main(String[] args) {
-            readDocxFile("C:\\Users\\Son\\Desktop\\text.docx");
-        }
+    }
+
+    public static void main(String[] args) {
+        readDocxFile("C:\\Users\\Son\\Desktop\\text.docx");
+    }
 }

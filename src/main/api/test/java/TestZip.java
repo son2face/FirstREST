@@ -1,15 +1,9 @@
 package test.java;
 
-import legal.Entity.Utility.DataZipEntity;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 /**
  * Created by Son on 4/18/2017.
@@ -29,7 +23,6 @@ public class TestZip {
     private static void readUsingZipFile() throws IOException {
 
     } /* * Example of reading Zip file using ZipInputStream in Java. */
-
 
 
     private static void extractEntry(final ZipEntry entry, InputStream is) throws IOException {

@@ -15,19 +15,19 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 public class DocFileProcessServiceTest {
+    @Deployment
+    public static JavaArchive createDeployment() {
+        return ShrinkWrap.create(JavaArchive.class)
+                .addClass(DocFileProcessService.class)
+                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+    }
+
     @Before
     public void setUp() throws Exception {
     }
 
     @After
     public void tearDown() throws Exception {
-    }
-
-    @Deployment
-    public static JavaArchive createDeployment() {
-        return ShrinkWrap.create(JavaArchive.class)
-                .addClass(DocFileProcessService.class)
-                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
 }
