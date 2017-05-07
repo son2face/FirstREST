@@ -8,10 +8,8 @@ import legal.Entity.Utility.DataZipEntity;
 import legal.Interface.DatabaseConnection.IDatabaseConnection;
 import legal.Interface.LegalProcess.ILegalProcess;
 import legal.Model.DataLink.DataLinkModel;
-import legal.Model.DataLink.DocumentLinkModel;
 import legal.Model.LegalInfo.LegalInfoModel;
 import legal.Service.DatabaseConnection.MySQLConnection;
-import legal.Service.DatabaseConnection.SQLSeverConnection;
 import legal.Service.LegalProcess.DocFileProcessService;
 import legal.Service.LegalProcess.LinkProcess;
 import legal.Service.UtilityService.FileService;
@@ -51,7 +49,6 @@ public class ProcessDoc {
                 List<DataLinkModel> dataLinkModels = (List<DataLinkModel>) (List<?>) dataLinkEntity1.select(link);
                 if (!dataLinkModels.isEmpty()) {
                     DataLinkModel dataLinkModel = dataLinkModels.get(0);
-
                     String folderUrl = baseFolderExtract + System.getProperty("file.separator") + fileName.split("\\.")[0];
                     FileService.createFolder(folderUrl);
                     for (DataZipEntity dataZipEntity : dataZipEntities) {
@@ -59,7 +56,6 @@ public class ProcessDoc {
                         FileService.writeFile(path, dataZipEntity.data);
                         DocumentLinkEntity documentLinkEntity = new DocumentLinkEntity(1, dataLinkModel.id, dataZipEntity.name, path.replace("\\", "\\\\"));
                         documentLinkEntity.insert();
-
                         ILegalProcess processLegal = new DocFileProcessService(dataZipEntity.data);
                         LegalInfoModel legalInfoModel = processLegal.getInfo();
                         if (legalInfoModel != null) {
