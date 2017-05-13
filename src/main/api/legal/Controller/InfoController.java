@@ -1,13 +1,9 @@
 package legal.Controller;
 
-import legal.Entity.LegalInfo.LegalInfoEntity;
 import legal.Interface.LegalInfo.ILegalInfoService;
-import legal.Model.LegalInfo.LegalInfoModel;
+import legal.Model.LegalInfo.SearchLegalInfoModel;
 import legal.Service.LegalInfo.LegalInfoService;
-import manager.Interface.IDatabaseService;
-import manager.Service.DatabaseService;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.ws.rs.*;
@@ -15,9 +11,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import java.sql.Date;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.List;
 
 @Path("/legal/info")
 public class InfoController {
@@ -30,41 +23,41 @@ public class InfoController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("")
-    public String doSearch(@Context HttpHeaders headers, @DefaultValue("") @QueryParam("q") String query, @DefaultValue("20") @QueryParam("limit") int limit, @QueryParam("date") String dateS) throws SQLException {
-        return legalInfoService.getLimit(query,limit,dateS).toString();
+    public String doSearch(@Context HttpHeaders headers, @DefaultValue("") @QueryParam("number") String number, @DefaultValue("20") @QueryParam("limit") int limit, @QueryParam("date") String dateS) {
+        SearchLegalInfoModel searchLegalInfoModel = new SearchLegalInfoModel();
+        searchLegalInfoModel.number = number;
+        searchLegalInfoModel.take = limit;
+        if (dateS == null || "".equals(dateS.trim())) {
+//            searchLegalInfoModel.dateCreated
+        } else searchLegalInfoModel.dateCreated = Date.valueOf(dateS);
+        return legalInfoService.get(searchLegalInfoModel).toString();
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("")
-    public String post(@Context HttpHeaders headers, @FormParam("type") String type, @FormParam("title") String title
-            , @FormParam("dateCreated") String dateCreated, @FormParam("dateExecute") String dateExecute
-            , @FormParam("standing") String standing, @FormParam("status") String status,@FormParam("number") String number
-            , @FormParam("confirmation") String confirmation, @FormParam("position") String position
-            , @FormParam("institution") String institution) {
+    public String post(@Context HttpHeaders headers, @FormDataParam("type") String type, @FormDataParam("title") String title
+            , @FormDataParam("dateCreated") String dateCreated, @FormDataParam("dateExecute") String dateExecute
+            , @FormDataParam("standing") String standing, @FormDataParam("status") String status, @FormDataParam("number") String number
+            , @FormDataParam("confirmation") String confirmation, @FormDataParam("position") String position
+            , @FormDataParam("institution") String institution) {
         JSONObject x = new JSONObject();
-        if (legalInfoService.create(type,number,title,dateCreated,dateExecute,standing,status,confirmation,position,institution)) {
-            x.put("status", "201");
-            return x.toString();
-        }
-        x.put("status", "404");
+        x.put("status", "201");
+        x.put("data", legalInfoService.create(type, number, title, dateCreated, dateExecute, standing, status, confirmation, position, institution));
         return x.toString();
     }
 
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("")
-    public String put(@Context HttpHeaders headers, @FormDataParam("id") int id, @FormParam("type") String type, @FormParam("title") String title
-            , @FormParam("dateCreated") String dateCreated, @FormParam("dateExecute") String dateExecute
-            , @FormParam("standing") String standing, @FormParam("status") String status,@FormParam("number") String number
-            , @FormParam("confirmation") String confirmation, @FormParam("position") String position
-            , @FormParam("institution") String institution ) {
+    public String put(@Context HttpHeaders headers, @FormDataParam("id") int id, @FormDataParam("type") String type, @FormDataParam("title") String title
+            , @FormDataParam("dateCreated") String dateCreated, @FormDataParam("dateExecute") String dateExecute
+            , @FormDataParam("standing") String standing, @FormDataParam("status") String status, @FormDataParam("number") String number
+            , @FormDataParam("confirmation") String confirmation, @FormDataParam("position") String position
+            , @FormDataParam("institution") String institution) {
         JSONObject x = new JSONObject();
-        if (legalInfoService.update(id,number,type,title,dateCreated,dateExecute,standing,status,confirmation,position,institution)) {
-            x.put("status", "204");
-            return x.toString();
-        }
-        x.put("status", "404");
+        x.put("status", "204");
+        x.put("data", legalInfoService.update(id, number, type, title, dateCreated, dateExecute, standing, status, confirmation, position, institution));
         return x.toString();
     }
 

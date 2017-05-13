@@ -1,121 +1,66 @@
 package legal.Entity.DataLink;
 
-import legal.Interface.DatabaseCommunication.IDatabaseEntity;
-import legal.Interface.DatabaseConnection.IDatabaseConnection;
-import legal.Model.DataLink.DataLinkModel;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
 
 /**
- * Created by Son on 4/10/2017.
+ * Created by Son on 5/12/2017.
  */
-public class DataLinkEntity implements IDatabaseEntity {
-    private static final String tableName = "datalink";
-    private static IDatabaseConnection DATABASECONNECTION;
-    DataLinkModel dataLink;
-    private IDatabaseConnection databaseConnection;
+@Entity
+@Table(name = "datalink", schema = "test", catalog = "")
+public class DatalinkEntity {
+    private int id;
+    private String link;
+    private String data;
 
-    public DataLinkEntity(int id, String link, String data) {
-        this.dataLink = new DataLinkModel(id, link, data);
-        databaseConnection = DATABASECONNECTION.clone();
+    @Id
+    @Column(name = "id", nullable = false)
+    public int getId() {
+        return id;
     }
 
-    public DataLinkEntity(DataLinkEntity dataLinkEntity) {
-        this.dataLink.id = dataLinkEntity.dataLink.id;
-        this.dataLink.link = dataLinkEntity.dataLink.link;
-        this.dataLink.data = dataLinkEntity.dataLink.data;
-        databaseConnection = DATABASECONNECTION.clone();
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public static void setDatabaseConnection(IDatabaseConnection databaseConnection) {
-        DataLinkEntity.DATABASECONNECTION = databaseConnection;
+    @Basic
+    @Column(name = "link", nullable = true, length = 1000)
+    public String getLink() {
+        return link;
     }
 
-    public static String getTableName() {
-        return tableName;
+    public void setLink(String link) {
+        this.link = link;
     }
 
-    @Override
-    public void insert() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.executeUpdate("INSERT INTO " + tableName + "(link,data) VALUES (N'" + dataLink.link + "',N'" + dataLink.data + "');");
+    @Basic
+    @Column(name = "data", nullable = true, length = -1)
+    public String getData() {
+        return data;
     }
 
-    @Override
-    public void update() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.executeUpdate("UPDATE " + tableName + "SET link = N'" + dataLink.link + "', data = N'" + dataLink.data + "' WHERE id = " + dataLink.id + ";");
-    }
-
-    @Override
-    public void delete() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.executeUpdate("DELETE FROM " + tableName + " WHERE id = " + dataLink.id + ";");
+    public void setData(String data) {
+        this.data = data;
     }
 
     @Override
-    public List<Object> select() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + ";");
-        List<Object> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(new DataLinkModel(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3)));
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DatalinkEntity that = (DatalinkEntity) o;
+
+        if (id != that.id) return false;
+        if (link != null ? !link.equals(that.link) : that.link != null) return false;
+        if (data != null ? !data.equals(that.data) : that.data != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (link != null ? link.hashCode() : 0);
+        result = 31 * result + (data != null ? data.hashCode() : 0);
         return result;
     }
-
-    public List<Object> select(String link) throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE link = N'" + link + "';");
-        List<Object> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(new DataLinkModel(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3)));
-        }
-        return result;
-    }
-
-    @Override
-    public List<Object> select(int id) throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE id = " + id + ";");
-        List<Object> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(new DataLinkModel(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3)));
-        }
-        return result;
-    }
-
-    @Override
-    public void insert(List<Object> data) throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.execute(databaseConnection.getDatabaseDictionary().beginTransaction());
-        for (DataLinkModel dataLink : (List<DataLinkModel>) (List<?>) data) {
-            statement.executeUpdate("INSERT INTO " + tableName + "(link,data) VALUES (N'" + dataLink.link + "',N'" + dataLink.data + "');");
-        }
-        statement.execute(databaseConnection.getDatabaseDictionary().endTransaction());
-    }
-
-    @Override
-    public void create() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.execute("CREATE TABLE " + tableName + "(id INT " + databaseConnection.getDatabaseDictionary().autoIncrement() + " PRIMARY KEY," +
-                "link NVARCHAR(1000),data TEXT);");
-    }
-
-    @Override
-    public void truncate() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.execute("TRUNCATE TABLE " + tableName + ";");
-    }
-
-    @Override
-    public void drop() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.execute("DROP TABLE " + tableName + ";");
-    }
-
 }

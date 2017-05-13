@@ -1,122 +1,79 @@
 package legal.Entity.DataLink;
 
-import legal.Interface.DatabaseCommunication.IDatabaseEntity;
-import legal.Interface.DatabaseConnection.IDatabaseConnection;
-import legal.Model.DataLink.DocumentLinkModel;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
 
 /**
- * Created by Son on 4/10/2017.
+ * Created by Son on 5/12/2017.
  */
-public class DocumentLinkEntity implements IDatabaseEntity {
-    private static final String tableName = "documentlink";
-    private static IDatabaseConnection DATABASECONNECTION;
-    public DocumentLinkModel documentLink;
-    private IDatabaseConnection databaseConnection;
+@Entity
+@Table(name = "documentlink", schema = "test", catalog = "")
+public class DocumentlinkEntity {
+    private int id;
+    private Integer link;
+    private String name;
+    private String documentLink;
 
-    public DocumentLinkEntity(int id, int linkId, String name, String documentLink) {
-        this.documentLink = new DocumentLinkModel(id, linkId, name, documentLink);
-        databaseConnection = DATABASECONNECTION.clone();
+    @Id
+    @Column(name = "id", nullable = false)
+    public int getId() {
+        return id;
     }
 
-    public DocumentLinkEntity(DocumentLinkEntity documentLinkEntity) {
-        this.documentLink.id = documentLinkEntity.documentLink.id;
-        this.documentLink.linkId = documentLinkEntity.documentLink.linkId;
-        this.documentLink.name = documentLinkEntity.documentLink.name;
-        this.documentLink.documentLink = documentLinkEntity.documentLink.documentLink;
-        databaseConnection = DATABASECONNECTION.clone();
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public static void setDatabaseConnection(IDatabaseConnection databaseConnection) {
-        DocumentLinkEntity.DATABASECONNECTION = databaseConnection;
+    @Basic
+    @Column(name = "link", nullable = true)
+    public Integer getLink() {
+        return link;
     }
 
-    public static String getTableName() {
-        return tableName;
+    public void setLink(Integer link) {
+        this.link = link;
+    }
+
+    @Basic
+    @Column(name = "name", nullable = true, length = 1000)
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Basic
+    @Column(name = "documentLink", nullable = true, length = 1000)
+    public String getDocumentLink() {
+        return documentLink;
+    }
+
+    public void setDocumentLink(String documentLink) {
+        this.documentLink = documentLink;
     }
 
     @Override
-    public void insert() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.executeUpdate("INSERT INTO " + tableName + "(link,name,documentLink) VALUES (" + documentLink.linkId + ",'" + documentLink.name + "','" + documentLink.documentLink + "');");
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DocumentlinkEntity that = (DocumentlinkEntity) o;
+
+        if (id != that.id) return false;
+        if (link != null ? !link.equals(that.link) : that.link != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (documentLink != null ? !documentLink.equals(that.documentLink) : that.documentLink != null) return false;
+
+        return true;
     }
 
     @Override
-    public void update() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.executeUpdate("UPDATE " + tableName + "SET link = " + documentLink.linkId + ", name = '" + documentLink.name + "', documentLink = '" + documentLink.documentLink + "' WHERE id = " + documentLink.id + ";");
-    }
-
-    @Override
-    public void delete() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.executeUpdate("DELETE FROM " + tableName + " WHERE id = " + documentLink.id + ";");
-    }
-
-    @Override
-    public List<Object> select() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + ";");
-        List<Object> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(new DocumentLinkModel(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3), resultSet.getString(4)));
-        }
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (link != null ? link.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (documentLink != null ? documentLink.hashCode() : 0);
         return result;
     }
-
-    public List<Object> select(String link) throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE link = '" + link + "';");
-        List<Object> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(new DocumentLinkModel(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3), resultSet.getString(4)));
-        }
-        return result;
-    }
-
-    @Override
-    public List<Object> select(int id) throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE id = " + id + ";");
-        List<Object> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(new DocumentLinkModel(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3), resultSet.getString(4)));
-        }
-        return result;
-    }
-
-    @Override
-    public void insert(List<Object> data) throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.execute(databaseConnection.getDatabaseDictionary().beginTransaction());
-        for (DocumentLinkModel documentLink : (List<DocumentLinkModel>) (List<?>) data) {
-            statement.executeUpdate("INSERT INTO " + tableName + "(link,name,documentLink) VALUES (" + documentLink.linkId + ",'" + documentLink.name + "','" + documentLink.documentLink + "');");
-        }
-        statement.execute(databaseConnection.getDatabaseDictionary().endTransaction());
-    }
-
-    @Override
-    public void create() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.execute("CREATE TABLE " + tableName + "(id INT " + databaseConnection.getDatabaseDictionary().autoIncrement() + " PRIMARY KEY," +
-                "link VARCHAR(1000),name VARCHAR (1000), documentLink VARCHAR (1000));");
-    }
-
-    @Override
-    public void truncate() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.execute("TRUNCATE TABLE " + tableName + ";");
-    }
-
-    @Override
-    public void drop() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.execute("DROP TABLE " + tableName + ";");
-    }
-
 }

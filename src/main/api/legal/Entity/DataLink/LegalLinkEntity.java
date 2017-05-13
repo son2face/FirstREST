@@ -1,121 +1,66 @@
 package legal.Entity.DataLink;
 
-import legal.Interface.DatabaseCommunication.IDatabaseEntity;
-import legal.Interface.DatabaseConnection.IDatabaseConnection;
-import legal.Model.DataLink.LegalLinkModel;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
 
 /**
- * Created by Son on 4/10/2017.
+ * Created by Son on 5/12/2017.
  */
-public class LegalLinkEntity implements IDatabaseEntity {
-    private static final String tableName = "LegalLink";
-    private static IDatabaseConnection DATABASECONNECTION;
-    LegalLinkModel legalLink;
-    private IDatabaseConnection databaseConnection;
+@Entity
+@Table(name = "legallink", schema = "test", catalog = "")
+public class LegallinkEntity {
+    private int id;
+    private Integer idLegal;
+    private Integer idLink;
 
-    public LegalLinkEntity(int id, int idLegal, int idLink) {
-        this.legalLink = new LegalLinkModel(id, idLegal, idLink);
-        databaseConnection = DATABASECONNECTION.clone();
+    @Id
+    @Column(name = "id", nullable = false)
+    public int getId() {
+        return id;
     }
 
-    public LegalLinkEntity(LegalLinkEntity legalLinkEntity) {
-        this.legalLink.id = legalLinkEntity.legalLink.id;
-        this.legalLink.idLegal = legalLinkEntity.legalLink.idLegal;
-        this.legalLink.idLink = legalLinkEntity.legalLink.idLink;
-        databaseConnection = DATABASECONNECTION.clone();
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public static void setDatabaseConnection(IDatabaseConnection databaseConnection) {
-        LegalLinkEntity.DATABASECONNECTION = databaseConnection;
+    @Basic
+    @Column(name = "idLegal", nullable = true)
+    public Integer getIdLegal() {
+        return idLegal;
     }
 
-    public static String getTableName() {
-        return tableName;
+    public void setIdLegal(Integer idLegal) {
+        this.idLegal = idLegal;
     }
 
-    @Override
-    public void insert() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.executeUpdate("INSERT INTO " + tableName + "(idLegal,idLink) VALUES (" + legalLink.idLegal + "," + legalLink.idLink + ");");
+    @Basic
+    @Column(name = "idLink", nullable = true)
+    public Integer getIdLink() {
+        return idLink;
     }
 
-    @Override
-    public void update() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.executeUpdate("UPDATE " + tableName + "SET idLegal = " + legalLink.idLegal + ", idLink = " + legalLink.idLink + " WHERE id = " + legalLink.id + ";");
-    }
-
-    @Override
-    public void delete() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.executeUpdate("DELETE FROM " + tableName + " WHERE id = " + legalLink.id + ";");
+    public void setIdLink(Integer idLink) {
+        this.idLink = idLink;
     }
 
     @Override
-    public List<Object> select() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + ";");
-        List<Object> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(new LegalLinkModel(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3)));
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LegallinkEntity that = (LegallinkEntity) o;
+
+        if (id != that.id) return false;
+        if (idLegal != null ? !idLegal.equals(that.idLegal) : that.idLegal != null) return false;
+        if (idLink != null ? !idLink.equals(that.idLink) : that.idLink != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (idLegal != null ? idLegal.hashCode() : 0);
+        result = 31 * result + (idLink != null ? idLink.hashCode() : 0);
         return result;
     }
-
-    public List<Object> select(String link) throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE link = " + link + ";");
-        List<Object> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(new LegalLinkModel(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3)));
-        }
-        return result;
-    }
-
-    @Override
-    public List<Object> select(int id) throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE id = " + id + ";");
-        List<Object> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(new LegalLinkModel(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3)));
-        }
-        return result;
-    }
-
-    @Override
-    public void insert(List<Object> data) throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.execute(databaseConnection.getDatabaseDictionary().beginTransaction());
-        for (LegalLinkModel legalLink : (List<LegalLinkModel>) (List<?>) data) {
-            statement.executeUpdate("INSERT INTO " + tableName + "(idLegal,idLink) VALUES (" + legalLink.idLegal + "," + legalLink.idLink + ");");
-        }
-        statement.execute(databaseConnection.getDatabaseDictionary().endTransaction());
-    }
-
-    @Override
-    public void create() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.execute("CREATE TABLE " + tableName + "(id INT " + databaseConnection.getDatabaseDictionary().autoIncrement() + " PRIMARY KEY," +
-                "idLegal INT,idLink INT);");
-    }
-
-    @Override
-    public void truncate() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.execute("TRUNCATE TABLE " + tableName + ";");
-    }
-
-    @Override
-    public void drop() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.execute("DROP TABLE " + tableName + ";");
-    }
-
 }

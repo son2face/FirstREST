@@ -1,7 +1,7 @@
 /**
  * Created by Son on 4/28/2017.
  */
-angular.module('managerApp').controller('LegalInfoController', function ($scope, $http, NgTableParams) {
+angular.module('managerApp').controller('LegalInfoController', ['$scope', '$http', 'NgTableParams', function ($scope, $http, NgTableParams) {
     $scope.database = [];
     // $scope.baseUrl = "http://skylab.uet.vnu.edu.vn:8080/api/";
     $scope.a = "aaaaaa";
@@ -81,4 +81,4 @@ angular.module('managerApp').controller('LegalInfoController', function ($scope,
             document.getElementById("myModal").style.display = "none";
         }
     }
-});
+}]);

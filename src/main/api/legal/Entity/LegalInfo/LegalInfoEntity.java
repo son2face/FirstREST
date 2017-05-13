@@ -1,132 +1,173 @@
 package legal.Entity.LegalInfo;
 
-import legal.Interface.DatabaseCommunication.IDatabaseEntity;
-import legal.Interface.DatabaseConnection.IDatabaseConnection;
-import legal.Model.DataLink.DataLinkModel;
-import legal.Model.LegalInfo.LegalInfoModel;
-
+import javax.persistence.*;
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Created by Son on 4/11/2017.
+ * Created by Son on 5/12/2017.
  */
-public class LegalInfoEntity implements IDatabaseEntity {
-    private static final String tableName = "LegalInfo";
-    private static IDatabaseConnection DATABASECONNECTION;
-    LegalInfoModel legalInfo;
-    private IDatabaseConnection databaseConnection;
+@Entity
+@Table(name = "legalinfo")
+public class LegalinfoEntity {
 
-    public LegalInfoEntity(LegalInfoModel legalInfo) {
-        this.legalInfo = legalInfo;
-        databaseConnection = DATABASECONNECTION.clone();
+    private int id;
+    private String number;
+    private Date dateCreated;
+    private String title;
+    private Date dateExecute;
+    private String standing;
+    private String confirmation;
+    private String institution;
+    private String type;
+    private String status;
+    private String position;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    public int getId() {
+        return id;
     }
 
-    public LegalInfoEntity() {
-        databaseConnection = DATABASECONNECTION.clone();
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public static void setDatabaseConnection(IDatabaseConnection databaseConnection) {
-        LegalInfoEntity.DATABASECONNECTION = databaseConnection;
+    @Basic
+    @Column(name = "number", nullable = true, length = 100)
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    @Basic
+    @Column(name = "dateCreated", nullable = true)
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    @Basic
+    @Column(name = "title", nullable = true, length = 2000)
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @Basic
+    @Column(name = "dateExecute", nullable = true)
+    public Date getDateExecute() {
+        return dateExecute;
+    }
+
+    public void setDateExecute(Date dateExecute) {
+        this.dateExecute = dateExecute;
+    }
+
+    @Basic
+    @Column(name = "standing", nullable = true, length = 1000)
+    public String getStanding() {
+        return standing;
+    }
+
+    public void setStanding(String standing) {
+        this.standing = standing;
+    }
+
+    @Basic
+    @Column(name = "confirmation", nullable = true, length = 1000)
+    public String getConfirmation() {
+        return confirmation;
+    }
+
+    public void setConfirmation(String confirmation) {
+        this.confirmation = confirmation;
+    }
+
+    @Basic
+    @Column(name = "institution", nullable = true, length = 1000)
+    public String getInstitution() {
+        return institution;
+    }
+
+    public void setInstitution(String institution) {
+        this.institution = institution;
+    }
+
+    @Basic
+    @Column(name = "type", nullable = true, length = 1000)
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Basic
+    @Column(name = "status", nullable = true, length = 1000)
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @Basic
+    @Column(name = "position", nullable = true, length = 1000)
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     @Override
-    public void insert() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.executeUpdate("INSERT INTO " + tableName + "(" +
-                "number ,dateCreated  ,title , dateExecute , standing, confirmation , institution, type, status, position" +
-                ") VALUES (N'" + legalInfo.number + "','" + legalInfo.dateCreated + "',N'" + legalInfo.title + "','" + legalInfo.dateExecute + "',N'" + legalInfo.standing + "',N'" + legalInfo.confirmation + "',N'" + legalInfo.institution + "',N'" + legalInfo.type + "',N'" + legalInfo.status + "',N'" + legalInfo.position + "');");
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LegalinfoEntity that = (LegalinfoEntity) o;
+
+        if (id != that.id) return false;
+        if (number != null ? !number.equals(that.number) : that.number != null) return false;
+        if (dateCreated != null ? !dateCreated.equals(that.dateCreated) : that.dateCreated != null) return false;
+        if (title != null ? !title.equals(that.title) : that.title != null) return false;
+        if (dateExecute != null ? !dateExecute.equals(that.dateExecute) : that.dateExecute != null) return false;
+        if (standing != null ? !standing.equals(that.standing) : that.standing != null) return false;
+        if (confirmation != null ? !confirmation.equals(that.confirmation) : that.confirmation != null) return false;
+        if (institution != null ? !institution.equals(that.institution) : that.institution != null) return false;
+        if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        if (status != null ? !status.equals(that.status) : that.status != null) return false;
+        if (position != null ? !position.equals(that.position) : that.position != null) return false;
+
+        return true;
     }
 
-    public List<Object> select(String number) throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE number = N'" + number + "';");
-        List<Object> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(new LegalInfoModel(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9), resultSet.getString(10), resultSet.getString(11)));
-        }
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (number != null ? number.hashCode() : 0);
+        result = 31 * result + (dateCreated != null ? dateCreated.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (dateExecute != null ? dateExecute.hashCode() : 0);
+        result = 31 * result + (standing != null ? standing.hashCode() : 0);
+        result = 31 * result + (confirmation != null ? confirmation.hashCode() : 0);
+        result = 31 * result + (institution != null ? institution.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (position != null ? position.hashCode() : 0);
         return result;
-    }
-
-    public List<Object> selectLimit(String title, int limit, Date date) throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-//        ResultSet resultSet = statement.executeQuery("SELECT TOP(" + limit + ") * FROM " + tableName + " WHERE TYPE LIKE N'%" + number + "%' AND dateExecute < '" + date + "';");
-//        System.out.println("SELECT * FROM " + tableName + " WHERE TITLE LIKE '%" + number + "%' AND dateCreated < '" + date + "' LIMIT " + limit + ";");
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE title LIKE '%" + title + "%' AND dateCreated < '" + date + "' LIMIT " + limit + ";");
-        List<Object> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(new LegalInfoModel(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9), resultSet.getString(10), resultSet.getString(11)));
-        }
-        return result;
-    }
-
-    @Override
-    public List<Object> select(int id) throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE id = " + id + ";");
-        List<Object> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(new LegalInfoModel(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9), resultSet.getString(10), resultSet.getString(11)));
-        }
-        return result;
-    }
-
-    @Override
-    public void update() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.executeUpdate("UPDATE " + tableName + "SET number = N'" + legalInfo.number + "',dateCreated = '" + legalInfo.dateCreated + "' ,title = N'" + legalInfo.title + "', dateExecute = '" + legalInfo.dateExecute + "', standing = N'" + legalInfo.standing + "', confirmation = N'" + legalInfo.confirmation + "', institution = N'" + legalInfo.institution + "', type = N'" + legalInfo.type + "', status = N'" + legalInfo.status + "' WHERE id = " + legalInfo.id + ";");
-    }
-
-    @Override
-    public void delete() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.executeUpdate("DELETE FROM " + tableName + " WHERE id = " + legalInfo.id + ";");
-    }
-
-    @Override
-    public List<Object> select() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + ";");
-        List<Object> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(new LegalInfoModel(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8), resultSet.getString(9), resultSet.getString(10), resultSet.getString(11)));
-        }
-        return result;
-    }
-
-    @Override
-    public void insert(List<Object> data) throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.execute(databaseConnection.getDatabaseDictionary().beginTransaction());
-        for (DataLinkModel dataLink : (List<DataLinkModel>) (List<?>) data) {
-            statement.executeUpdate("INSERT INTO " + tableName + "(" +
-                    "number ,dateCreated  ,title , dateExecute , standing, confirmation , institution, type, status" +
-                    ") VALUES (N'" + legalInfo.number + "','" + legalInfo.dateCreated + "',N'" + legalInfo.title + "','" + legalInfo.dateExecute + "',N'" + legalInfo.standing + "',N'" + legalInfo.confirmation + "',N'" + legalInfo.institution + "',N'" + legalInfo.type + "',N'" + legalInfo.status + "');");
-        }
-        statement.execute(databaseConnection.getDatabaseDictionary().endTransaction());
-    }
-
-    @Override
-    public void create() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.execute("CREATE TABLE " + tableName + "(id INT " + databaseConnection.getDatabaseDictionary().autoIncrement() + " PRIMARY KEY," +
-                "number NVARCHAR(100),dateCreated DATE ,title NVARCHAR(1000), dateExecute DATE , standing NVARCHAR(1000), confirmation NVARCHAR(1000), institution NVARCHAR(1000), type NVARCHAR(1000), status NVARCHAR(1000), position NVARCHAR(1000));");
-    }
-
-    @Override
-    public void truncate() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.execute("TRUNCATE TABLE " + tableName + ";");
-    }
-
-
-    @Override
-    public void drop() throws SQLException {
-        Statement statement = databaseConnection.createStatement();
-        statement.execute("DROP TABLE " + tableName + ";");
     }
 }

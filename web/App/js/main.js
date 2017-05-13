@@ -157,6 +157,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', functio
     $urlRouterProvider.otherwise("/LegalInfo");
 
     $stateProvider
+
     // Dashboard
         .state('LegalInfo', {
             url: "/LegalInfo",
@@ -581,3 +582,4 @@ app.run(["$rootScope", "settings", "$state", function ($rootScope, settings, $st
     $rootScope.$state = $state; // state to be accessed from view
     $rootScope.$settings = settings; // state to be accessed from view
 }]);
+
