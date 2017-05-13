@@ -1,8 +1,5 @@
 package manager.Service;
 
-import legal.Interface.DatabaseConnection.IDatabaseConnection;
-import legal.Service.DatabaseConnection.MySQLConnection;
-import legal.Service.DatabaseConnection.SQLSeverConnection;
 import manager.Entity.DatabaseEntity;
 import manager.Interface.IDatabaseService;
 import manager.Model.DatabaseModel;
@@ -51,33 +48,11 @@ public class DatabaseService implements IDatabaseService {
         return result;
     }
 
-    public IDatabaseConnection getDatabaseConnection(int id) {
+    public DatabaseModel get(int id) {
         DatabaseEntity x = new DatabaseEntity();
         List<DatabaseModel> databaseModelList = (List<DatabaseModel>) (List<?>) x.select(id);
         if (databaseModelList != null && !databaseModelList.isEmpty()) {
-            DatabaseModel databaseModel = databaseModelList.get(0);
-            switch (databaseModel.typeDB) {
-                case 0:
-                    return new MySQLConnection(databaseModel);
-                default:
-                    return new SQLSeverConnection(databaseModel);
-            }
-        }
-        return null;
-    }
-
-    public IDatabaseConnection getDatabaseConnection() {
-        DatabaseEntity x = new DatabaseEntity();
-        System.out.println(DatabaseEntity.getDatabaseModels().size());
-        List<DatabaseModel> databaseModelList = (List<DatabaseModel>) (List<?>) x.select(DatabaseEntity.getDatabaseModels().size() - 1);
-        if (databaseModelList != null && !databaseModelList.isEmpty()) {
-            DatabaseModel databaseModel = databaseModelList.get(0);
-            switch (databaseModel.typeDB) {
-                case 0:
-                    return new MySQLConnection(databaseModel);
-                default:
-                    return new SQLSeverConnection(databaseModel);
-            }
+            return databaseModelList.get(0);
         }
         return null;
     }

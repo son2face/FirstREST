@@ -13,6 +13,7 @@ import java.util.Scanner;
  * Created by Son on 4/28/2017.
  */
 public class DatabaseEntity implements IDatabaseEntity {
+    public static int Active = 0;
     private static String fileDir;
     private static List<DatabaseModel> databaseModels;
     private static int id = 0;
@@ -23,6 +24,10 @@ public class DatabaseEntity implements IDatabaseEntity {
     }
 
     public DatabaseEntity() {
+    }
+
+    public static void setActive(int active) {
+        Active = active;
     }
 
     public static void loadData() {

@@ -1,19 +1,17 @@
 package manager.Interface;
 
-import legal.Interface.DatabaseConnection.IDatabaseConnection;
+import manager.Model.DatabaseModel;
 import org.json.simple.JSONObject;
 
 /**
  * Created by Son on 4/28/2017.
  */
 public interface IDatabaseService {
-    IDatabaseConnection getDatabaseConnection(int id);
-
-    IDatabaseConnection getDatabaseConnection();
-
     boolean create(String url, String name, String password, String dbName, int type);
 
     JSONObject get();
+
+    DatabaseModel get(int id);
 
     boolean delete(int id);
 

@@ -1,11 +1,8 @@
 package manager.Controller;
 
-import legal.Entity.DataLink.DataLinkEntity;
-import legal.Entity.DataLink.DocumentLinkEntity;
-import legal.Entity.DataLink.LegalLinkEntity;
-import legal.Entity.LegalInfo.LegalInfoEntity;
-import legal.Interface.DatabaseConnection.IDatabaseConnection;
+import manager.Interface.IDatabaseControllService;
 import manager.Interface.IDatabaseService;
+import manager.Service.DatabaseControllService;
 import manager.Service.DatabaseService;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.simple.JSONObject;
@@ -19,9 +16,11 @@ import javax.ws.rs.core.MediaType;
 public class DatabaseController {
 
     private IDatabaseService databaseService;
+    private IDatabaseControllService databaseControllService;
 
     public DatabaseController() {
         databaseService = new DatabaseService();
+        databaseControllService = new DatabaseControllService();
     }
 
     @GET
@@ -74,11 +73,7 @@ public class DatabaseController {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("setdatabase/{id}")
     public String setDB(@Context HttpHeaders headers, @PathParam("id") int id) {
-        IDatabaseConnection connection = databaseService.getDatabaseConnection(id);
-        LegalInfoEntity.setDatabaseConnection(connection);
-        DataLinkEntity.setDatabaseConnection(connection);
-        DocumentLinkEntity.setDatabaseConnection(connection);
-        LegalLinkEntity.setDatabaseConnection(connection);
+        databaseControllService.setActive(id);
         return "{\"status\":\"200\"}";
     }
 }

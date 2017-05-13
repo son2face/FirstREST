@@ -1,9 +1,9 @@
 //package manager.Controller;
 //
-//import legal.Entity.DataLink.DataLinkEntity;
-//import legal.Entity.DataLink.DocumentLinkEntity;
-//import legal.Entity.DataLink.LegalLinkEntity;
-//import legal.Entity.LegalInfo.LegalInfoEntity;
+//import legal.Entity.DataLink.DataLinkEntitys;
+//import legal.Entity.DataLink.DocumentLinkEntitys;
+//import legal.Entity.DataLink.LegalLinkEntitys;
+//import legal.Entity.LegalInfo.LegalInfoEntitys;
 //import legal.Interface.DatabaseConnection.IDatabaseConnection;
 //import manager.Interface.IDatabaseService;
 //import manager.Service.DatabaseService;

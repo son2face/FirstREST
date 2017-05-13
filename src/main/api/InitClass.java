@@ -1,11 +1,4 @@
-import legal.Entity.DataLink.DataLinkEntity;
-import legal.Entity.DataLink.DocumentLinkEntity;
-import legal.Entity.DataLink.LegalLinkEntity;
-import legal.Entity.LegalInfo.LegalInfoEntity;
-import legal.Interface.DatabaseConnection.IDatabaseConnection;
 import manager.Entity.DatabaseEntity;
-import manager.Interface.IDatabaseService;
-import manager.Service.DatabaseService;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -17,12 +10,6 @@ public class InitClass implements ServletContextListener {
     public void contextInitialized(ServletContextEvent arg0) {
         DatabaseEntity.setFileDir("database.txt");
         DatabaseEntity.loadData();
-        IDatabaseService databaseService = new DatabaseService();
-        IDatabaseConnection connection = databaseService.getDatabaseConnection();
-        LegalInfoEntity.setDatabaseConnection(connection);
-        DataLinkEntity.setDatabaseConnection(connection);
-        DocumentLinkEntity.setDatabaseConnection(connection);
-        LegalLinkEntity.setDatabaseConnection(connection);
     }
 
     @Override

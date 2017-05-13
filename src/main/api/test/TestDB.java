@@ -1,62 +1,57 @@
 package test;
 
-import legal.Entity.DataLink.DataLinkEntity;
-import legal.Entity.LegalInfo.LegalInfoEntity;
-import legal.Interface.DatabaseConnection.IDatabaseConnection;
-import legal.Interface.LegalProcess.ILegalProcess;
-import legal.Model.DataLink.DataLinkModel;
 import legal.Model.LegalInfo.LegalInfoModel;
-import legal.Service.DatabaseConnection.MySQLConnection;
-import legal.Service.LegalProcess.LinkProcess;
+import legal.Model.LegalInfo.SearchLegalInfoModel;
+import legal.Service.LegalInfo.LegalInfoService;
+import manager.Entity.DatabaseEntity;
 import manager.Model.DatabaseModel;
-
-import java.sql.SQLException;
-import java.util.List;
+import manager.Service.DatabaseControllService;
 
 /**
  * Created by Son on 4/10/2017.
  */
 public class TestDB {
-    public static void main(String[] args) throws SQLException {
-        DatabaseModel databaseModel = new DatabaseModel(0, 0, "112.137.129.95", "Legal", "nguyenson", "root");
-        IDatabaseConnection connection = new MySQLConnection(databaseModel);
-        LegalInfoEntity.setDatabaseConnection(connection);
-        ILegalProcess processLegal = new LinkProcess("http://vbpl.vn/bacgiang/Pages/vbpq-toanvan.aspx?ItemID=112233");
-        LegalInfoModel res = processLegal.getInfo();
-        LegalInfoEntity test = new LegalInfoEntity(res);
-        test.create();
-        test.insert();
-        List<LegalInfoModel> t = (List<LegalInfoModel>) (List<?>) test.select(res.number);
-        System.out.println(t.get(0).toString());
-        System.out.println(processLegal.getData());
-        test.drop();
-//        testLegalInfoEntity();
+    public static void main(String[] args) {
+        DatabaseModel databaseModel = new DatabaseModel(0, 0, "localhost", "test", "root", "root");
+        DatabaseEntity.setFileDir("H://database.txt");
+        DatabaseEntity.loadData();
+//        DatabaseControllService databaseControllService = new DatabaseControllService(); // khởi tạo service làm việc
+//        LegalInfoService.setFactory(databaseControllService.createConfiguration(databaseModel).buildSessionFactory());
+        testGetData();
+//        testGetId();
+//        testCreateData();
+//        testEditData();
+//        testDeleteData();
     }
 
-    static void testDataLinkEntity() throws SQLException {
-        DatabaseModel databaseModel = new DatabaseModel(0, 0, "112.137.129.95", "Legal", "nguyenson", "root");
-        IDatabaseConnection connection = new MySQLConnection(databaseModel);
-        DataLinkEntity.setDatabaseConnection(connection);
-        DataLinkEntity test = new DataLinkEntity(1, "2", "2");
-        test.create();
-        test.insert();
-        List<DataLinkModel> t = (List<DataLinkModel>) (List<?>) test.select("2");
-        for (DataLinkModel x : t) {
-            System.out.println(x.link);
-        }
-        test.drop();
+    static void testGetData() {
+        SearchLegalInfoModel searchLegalInfoModel = new SearchLegalInfoModel();
+        searchLegalInfoModel.number = "QĐ-TTg";
+        LegalInfoService legalInfoService = new LegalInfoService();
+        System.out.println(legalInfoService.get(searchLegalInfoModel).toString());
     }
 
-    static void testLegalInfoEntity() throws SQLException {
-        DatabaseModel databaseModel = new DatabaseModel(0, 0, "112.137.129.95", "Legal", "nguyenson", "root");
-        IDatabaseConnection connection = new MySQLConnection(databaseModel);
-        LegalInfoEntity.setDatabaseConnection(connection);
-        LinkProcess link = new LinkProcess("http://vbpl.vn/botuphap/Pages/vbpq-toanvan.aspx?ItemID=118077&dvid=41");
-        LegalInfoEntity test = new LegalInfoEntity(link.getInfo());
-        test.insert();
-        List<LegalInfoModel> t = (List<LegalInfoModel>) (List<?>) test.select(1);
-        for (LegalInfoModel x : t) {
-            System.out.println(x.toString());
-        }
+
+    static void testGetId() {
+        LegalInfoService legalInfoService = new LegalInfoService();
+        System.out.println(legalInfoService.get(47585).toString());
+    }
+
+    static void testCreateData() {
+        LegalInfoService legalInfoService = new LegalInfoService();
+        LegalInfoModel legalInfoModel = legalInfoService.create("a", "a", "", "2017-03-03", "2017-02-02", "", "", "", "", "");
+        System.out.println(legalInfoModel.toString());
+    }
+
+    static void testEditData() {
+        LegalInfoService legalInfoService = new LegalInfoService();
+        legalInfoService.update(47585, "a", "a", "", "2014-03-03", "2017-02-02", "", "", "", "", "");
+//        System.out.println(legalInfoModel.toString());
+        testGetId();
+    }
+
+    static void testDeleteData() {
+        LegalInfoService legalInfoService = new LegalInfoService();
+        legalInfoService.delete(47585);
     }
 }
