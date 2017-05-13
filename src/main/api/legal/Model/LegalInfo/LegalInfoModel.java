@@ -1,5 +1,6 @@
 package legal.Model.LegalInfo;
 
+import legal.Entity.LegalInfo.LegalinfoEntity;
 import org.json.simple.JSONObject;
 
 import java.sql.Date;
@@ -45,7 +46,37 @@ public class LegalInfoModel {
         this.position = position;
     }
 
+    public LegalInfoModel(LegalinfoEntity legalinfoEntity) {
+        this.id = legalinfoEntity.getId();
+        this.number = legalinfoEntity.getNumber();
+        this.dateCreated = legalinfoEntity.getDateCreated();
+        this.title = legalinfoEntity.getTitle();
+        this.dateExecute = legalinfoEntity.getDateExecute();
+        this.standing = legalinfoEntity.getStanding();
+        this.confirmation = legalinfoEntity.getConfirmation();
+        this.institution = legalinfoEntity.getInstitution();
+        this.type = legalinfoEntity.getType();
+        this.status = legalinfoEntity.getStatus();
+        this.position = legalinfoEntity.getPosition();
+    }
+
     public LegalInfoModel() {
+    }
+
+    public LegalinfoEntity toEntity() {
+        LegalinfoEntity legalinfoEntity = new LegalinfoEntity();
+        legalinfoEntity.setId(id);
+        legalinfoEntity.setConfirmation(confirmation);
+        legalinfoEntity.setDateCreated(dateCreated);
+        legalinfoEntity.setDateExecute(dateExecute);
+        legalinfoEntity.setInstitution(institution);
+        legalinfoEntity.setNumber(number);
+        legalinfoEntity.setType(type);
+        legalinfoEntity.setTitle(title);
+        legalinfoEntity.setStatus(status);
+        legalinfoEntity.setStanding(standing);
+        legalinfoEntity.setPosition(position);
+        return legalinfoEntity;
     }
 
     public String toJSon() {

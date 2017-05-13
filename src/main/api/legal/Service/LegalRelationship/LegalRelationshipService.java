@@ -1,9 +1,9 @@
-package legal.Service.LegalInfo;
+package legal.Service.LegalRelationship;
 
-import legal.Entity.LegalInfo.LegalinfoEntity;
-import legal.Interface.LegalInfo.ILegalInfoService;
-import legal.Model.LegalInfo.LegalInfoModel;
-import legal.Model.LegalInfo.SearchLegalInfoModel;
+import legal.Entity.LegalRelationship.LegalrelationshipEntity;
+import legal.Interface.LegalRelationship.ILegalRelationshipService;
+import legal.Model.LegalRelationship.LegalRelationshipModel;
+import legal.Model.LegalRelationship.SearchLegalRelationshipModel;
 import manager.Entity.DatabaseEntity;
 import manager.Interface.IDatabaseControllService;
 import manager.Interface.IDatabaseService;
@@ -14,21 +14,22 @@ import org.hibernate.criterion.Expression;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Son on 5/5/2017.
+ * Created by Son on 5/13/2017.
  */
-public class LegalInfoService implements ILegalInfoService {
+public class LegalRelationshipService implements ILegalRelationshipService {
     private static SessionFactory factory;
     private static int currentActive;
 
-    public LegalInfoService(SessionFactory factory) {
+    public LegalRelationshipService(SessionFactory factory) {
         this.factory = factory;
     }
 
-    public LegalInfoService() {
+    public LegalRelationshipService() {
         if (factory == null || currentActive != DatabaseEntity.Active) {
             IDatabaseService databaseService = new DatabaseService();
             IDatabaseControllService databaseControllService = new DatabaseControllService();
@@ -38,18 +39,18 @@ public class LegalInfoService implements ILegalInfoService {
     }
 
     public static void setFactory(SessionFactory factory) {
-        LegalInfoService.factory = factory;
+        LegalRelationshipService.factory = factory;
     }
 
-    public LegalInfoModel create(String number, String type, String title, String dateCreated, String dateExecute, String standing, String status, String confirmation, String position, String institution) {
+    public LegalRelationshipModel create(Integer fromlegal, Integer tolegal, Timestamp date, Integer type) {
         Session session = factory.openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            LegalInfoModel legalInfoModel = new LegalInfoModel(0, number, dateCreated, title, dateExecute, standing, confirmation, institution, type, status, position);
-            int id = (int) session.save(legalInfoModel.toEntity());
+            LegalRelationshipModel legalRelationshipModel = new LegalRelationshipModel(0, fromlegal, tolegal, date, type);
+            int id = (int) session.save(legalRelationshipModel.toEntity());
             tx.commit();
-            LegalInfoModel result = get(id);
+            LegalRelationshipModel result = get(id);
             return result;
         } catch (HibernateException e) {
             if (tx != null) tx.rollback();
@@ -61,31 +62,31 @@ public class LegalInfoService implements ILegalInfoService {
     }
 
     @Override
-    public LegalInfoModel get(int id) {
+    public LegalRelationshipModel get(int id) {
         Session session = factory.openSession();
-        Criteria criteria = session.createCriteria(LegalinfoEntity.class, "legalinfo");
+        Criteria criteria = session.createCriteria(LegalRelationshipModel.class, "legalinfo");
         criteria.add(Expression.ge("id", id));
-        List<LegalinfoEntity> legalinfoEntities = criteria.list();
-        if (!legalinfoEntities.isEmpty()) {
-            return new LegalInfoModel(legalinfoEntities.get(0));
+        List<LegalrelationshipEntity> legalrelationshipEntities = criteria.list();
+        if (!legalrelationshipEntities.isEmpty()) {
+            return new LegalRelationshipModel(legalrelationshipEntities.get(0));
         }
         return null;
     }
 
     @Override
-    public JSONObject get(SearchLegalInfoModel searchLegalInfoModel) {
+    public JSONObject get(SearchLegalRelationshipModel searchLegalRelationshipModel) {
         Session session = factory.openSession();
-        Criteria criteria = session.createCriteria(LegalinfoEntity.class, "legalinfo");
-        criteria = searchLegalInfoModel.apply(criteria);
-        List<LegalinfoEntity> legalinfoEntities = criteria.list();
-        List<LegalInfoModel> legalInfoModels = new ArrayList<>();
-        legalinfoEntities.forEach(x -> {
-            legalInfoModels.add(new LegalInfoModel(x));
+        Criteria criteria = session.createCriteria(SearchLegalRelationshipModel.class, "legalrelationship");
+        criteria = searchLegalRelationshipModel.apply(criteria);
+        List<LegalrelationshipEntity> legalrelationshipEntities = criteria.list();
+        List<LegalRelationshipModel> legalRelationshipModels = new ArrayList<>();
+        legalrelationshipEntities.forEach(x -> {
+            legalRelationshipModels.add(new LegalRelationshipModel(x));
         });
         JSONObject obj = new JSONObject();
         int statusCode = 200;
         JSONArray data = new JSONArray();
-        for (LegalInfoModel x : legalInfoModels) {
+        for (LegalRelationshipModel x : legalRelationshipModels) {
             data.add(x.toJsonObject());
         }
         obj.put("status", statusCode);
@@ -99,9 +100,9 @@ public class LegalInfoService implements ILegalInfoService {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            LegalinfoEntity legalinfoEntity = new LegalinfoEntity();
-            legalinfoEntity.setId(id);
-            session.delete(legalinfoEntity);
+            LegalrelationshipEntity legalrelationshipEntity = new LegalrelationshipEntity();
+            legalrelationshipEntity.setId(id);
+            session.delete(legalrelationshipEntity);
             tx.commit();
             return true;
         } catch (HibernateException e) {
@@ -114,15 +115,15 @@ public class LegalInfoService implements ILegalInfoService {
     }
 
     @Override
-    public LegalInfoModel update(int id, String number, String type, String title, String dateCreated, String dateExecute, String standing, String status, String confirmation, String position, String institution) {
+    public LegalRelationshipModel update(int id, Integer fromlegal, Integer tolegal, Timestamp date, Integer type) {
         Session session = factory.openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            LegalInfoModel legalInfoModel = new LegalInfoModel(id, number, dateCreated, title, dateExecute, standing, confirmation, institution, type, status, position);
-            session.update(legalInfoModel.toEntity());
+            LegalRelationshipModel legalRelationshipModel = new LegalRelationshipModel(id, fromlegal, tolegal, date, type);
+            session.update(legalRelationshipModel.toEntity());
             tx.commit();
-            LegalInfoModel result = get(id);
+            LegalRelationshipModel result = get(id);
             return result;
         } catch (HibernateException e) {
             if (tx != null) tx.rollback();
